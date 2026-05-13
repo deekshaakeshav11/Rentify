@@ -6,16 +6,21 @@ function SplashScreen({ onFinish }) {
   const [logoVisible, setLogoVisible] = useState(false);
 
   useEffect(() => {
-    // Logo pops in
-    setTimeout(() => setLogoVisible(true), 300);
-    // Start fade out
-    setTimeout(() => setFadeOut(true), 2000);
-    // Remove splash screen
-    setTimeout(() => {
-      setVisible(false);
-      onFinish();
-    }, 2800);
-  }, []);
+  const logoTimer = setTimeout(() => setLogoVisible(true), 300);
+
+  const fadeTimer = setTimeout(() => setFadeOut(true), 2000);
+
+  const finishTimer = setTimeout(() => {
+    setVisible(false);
+    onFinish();
+  }, 2800);
+
+  return () => {
+    clearTimeout(logoTimer);
+    clearTimeout(fadeTimer);
+    clearTimeout(finishTimer);
+  };
+}, [onFinish]);
 
   if (!visible) return null;
 
